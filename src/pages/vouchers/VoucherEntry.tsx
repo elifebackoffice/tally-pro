@@ -312,23 +312,47 @@ export default function VoucherEntry() {
             <Button type="button" size="sm" variant="outline" onClick={addLine}><Plus className="w-3 h-3 mr-1" />Add</Button>
           </div>
           {lines.map((line, idx) => (
-            <div key={idx} className="grid grid-cols-12 gap-2 items-end">
-              <Select value={line.entry_type} onValueChange={(v: any) => { const n = [...lines]; n[idx] = { ...line, entry_type: v }; setLines(n); }}>
-                <SelectTrigger className="col-span-2 h-9"><SelectValue /></SelectTrigger>
-                <SelectContent><SelectItem value="debit">Dr</SelectItem><SelectItem value="credit">Cr</SelectItem></SelectContent>
-              </Select>
-              <Select value={line.ledger_id} onValueChange={(v) => { const n = [...lines]; n[idx] = { ...line, ledger_id: v }; setLines(n); }}>
-                <SelectTrigger className="col-span-7 h-9"><SelectValue placeholder="Ledger" /></SelectTrigger>
-                <SelectContent className="max-h-72">{ledgers.map(l => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent>
-              </Select>
-              <Input type="number" step="0.01" placeholder="Amount" className="col-span-2 h-9 text-right num" value={line.amount}
-                onChange={(e) => { const n = [...lines]; n[idx] = { ...line, amount: e.target.value }; setLines(n); }} />
-              <Button type="button" size="icon" variant="ghost" className="col-span-1 h-9" onClick={() => setLines(lines.filter((_, i) => i !== idx))}>
-                <Trash2 className="w-4 h-4" />
-              </Button>
+            <div key={idx} className="rounded-md border border-border bg-muted/30 p-2 md:bg-transparent md:border-0 md:p-0 md:rounded-none">
+              {/* Mobile stacked */}
+              <div className="md:hidden space-y-2">
+                <div className="grid grid-cols-[80px_1fr] gap-2">
+                  <Select value={line.entry_type} onValueChange={(v: any) => { const n = [...lines]; n[idx] = { ...line, entry_type: v }; setLines(n); }}>
+                    <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                    <SelectContent><SelectItem value="debit">Dr</SelectItem><SelectItem value="credit">Cr</SelectItem></SelectContent>
+                  </Select>
+                  <Select value={line.ledger_id} onValueChange={(v) => { const n = [...lines]; n[idx] = { ...line, ledger_id: v }; setLines(n); }}>
+                    <SelectTrigger className="h-9"><SelectValue placeholder="Ledger" /></SelectTrigger>
+                    <SelectContent className="max-h-72">{ledgers.map(l => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <Input type="number" step="0.01" placeholder="Amount" className="h-9 text-right num flex-1" value={line.amount}
+                    onChange={(e) => { const n = [...lines]; n[idx] = { ...line, amount: e.target.value }; setLines(n); }} />
+                  <Button type="button" size="icon" variant="ghost" className="h-9 w-9 text-destructive hover:text-destructive" onClick={() => setLines(lines.filter((_, i) => i !== idx))}>
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Desktop grid */}
+              <div className="hidden md:grid grid-cols-12 gap-2 items-end">
+                <Select value={line.entry_type} onValueChange={(v: any) => { const n = [...lines]; n[idx] = { ...line, entry_type: v }; setLines(n); }}>
+                  <SelectTrigger className="col-span-2 h-9"><SelectValue /></SelectTrigger>
+                  <SelectContent><SelectItem value="debit">Dr</SelectItem><SelectItem value="credit">Cr</SelectItem></SelectContent>
+                </Select>
+                <Select value={line.ledger_id} onValueChange={(v) => { const n = [...lines]; n[idx] = { ...line, ledger_id: v }; setLines(n); }}>
+                  <SelectTrigger className="col-span-7 h-9"><SelectValue placeholder="Ledger" /></SelectTrigger>
+                  <SelectContent className="max-h-72">{ledgers.map(l => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent>
+                </Select>
+                <Input type="number" step="0.01" placeholder="Amount" className="col-span-2 h-9 text-right num" value={line.amount}
+                  onChange={(e) => { const n = [...lines]; n[idx] = { ...line, amount: e.target.value }; setLines(n); }} />
+                <Button type="button" size="icon" variant="ghost" className="col-span-1 h-9" onClick={() => setLines(lines.filter((_, i) => i !== idx))}>
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           ))}
-          <div className="border-t pt-2 flex gap-6 text-sm justify-end">
+          <div className="border-t pt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm sm:justify-end">
             <div>Dr Total: <span className="num font-semibold">{formatINR(drTotal)}</span></div>
             <div>Cr Total: <span className="num font-semibold">{formatINR(crTotal)}</span></div>
             <div className={Math.abs(drTotal - crTotal) > 0.001 ? "text-destructive font-bold" : "text-success font-bold"}>
@@ -340,9 +364,9 @@ export default function VoucherEntry() {
 
       <Card className="p-4 space-y-3">
         <div><Label>Narration</Label><Textarea value={narration} onChange={e => setNarration(e.target.value)} rows={2} /></div>
-        <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => navigate(-1)}>Cancel (Esc)</Button>
-          <Button onClick={save} disabled={saving}>{saving ? "Saving…" : "Accept (Ctrl+A)"}</Button>
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
+          <Button variant="outline" onClick={() => navigate(-1)} className="w-full sm:w-auto">Cancel (Esc)</Button>
+          <Button onClick={save} disabled={saving} className="w-full sm:w-auto">{saving ? "Saving…" : "Accept (Ctrl+A)"}</Button>
         </div>
       </Card>
     </div>
