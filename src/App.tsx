@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Auth from "./pages/Auth";
 import CompanyNew from "./pages/CompanyNew";
+import Companies from "./pages/Companies";
 import MastersIndex from "./pages/masters/MastersIndex";
 import Ledgers from "./pages/masters/Ledgers";
 import LedgerNew from "./pages/masters/LedgerNew";
@@ -39,6 +40,7 @@ const App = () => (
             <Routes>
               <Route path="/auth" element={<Auth />} />
               <Route path="/companies/new" element={<ProtectedRoute requireCompany={false}><CompanyNew /></ProtectedRoute>} />
+              <Route path="/companies" element={<ProtectedRoute requireCompany={false}><Companies /></ProtectedRoute>} />
 
               <Route path="/" element={<ProtectedRoute><Index /></ProtectedRoute>} />
               <Route path="/masters" element={<ProtectedRoute><MastersIndex /></ProtectedRoute>} />
