@@ -189,14 +189,14 @@ export default function VoucherEntry() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-4">
-      <Card className="p-4 flex items-center justify-between">
+      <Card className="p-3 sm:p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div className="flex items-center gap-3">
           <span className="tally-key">{cfg.key}</span>
-          <h1 className="text-xl font-bold">{cfg.title}</h1>
+          <h1 className="text-lg sm:text-xl font-bold">{cfg.title}</h1>
         </div>
-        <div className="flex items-center gap-3">
-          <div><Label className="text-xs">No.</Label><Input className="h-8 w-24" value={voucherNo} onChange={e => setVoucherNo(e.target.value)} /></div>
-          <div><Label className="text-xs">Date</Label><Input className="h-8" type="date" value={voucherDate} onChange={e => setVoucherDate(e.target.value)} /></div>
+        <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 sm:gap-3">
+          <div><Label className="text-xs">No.</Label><Input className="h-8 w-full sm:w-24" value={voucherNo} onChange={e => setVoucherNo(e.target.value)} /></div>
+          <div><Label className="text-xs">Date</Label><Input className="h-8 w-full" type="date" value={voucherDate} onChange={e => setVoucherDate(e.target.value)} /></div>
         </div>
       </Card>
 
@@ -220,30 +220,72 @@ export default function VoucherEntry() {
               <Label>Items</Label>
               <Button type="button" size="sm" variant="outline" onClick={addInv}><Plus className="w-3 h-3 mr-1" />Add Item</Button>
             </div>
-            <div className="space-y-2">
+            <div className="space-y-3">
               {inv.map((line, idx) => (
-                <div key={idx} className="grid grid-cols-12 gap-2 items-end">
-                  <div className="col-span-5">
-                    <Select value={line.stock_item_id} onValueChange={(v) => {
-                      const it = items.find(x => x.id === v);
-                      const next = [...inv]; next[idx] = { ...line, stock_item_id: v, rate: it?.standard_rate ? String(it.standard_rate) : line.rate, gst_rate: String(it?.gst_rate ?? line.gst_rate) };
-                      setInv(next);
-                    }}>
-                      <SelectTrigger className="h-9"><SelectValue placeholder="Item" /></SelectTrigger>
-                      <SelectContent>{items.map(i => <SelectItem key={i.id} value={i.id}>{i.name}</SelectItem>)}</SelectContent>
-                    </Select>
+                <div key={idx} className="rounded-md border border-border bg-muted/30 p-2 md:bg-transparent md:border-0 md:p-0 md:rounded-none">
+                  {/* Mobile stacked layout */}
+                  <div className="md:hidden space-y-2">
+                    <div>
+                      <Label className="text-[10px] uppercase text-muted-foreground">Item</Label>
+                      <Select value={line.stock_item_id} onValueChange={(v) => {
+                        const it = items.find(x => x.id === v);
+                        const next = [...inv]; next[idx] = { ...line, stock_item_id: v, rate: it?.standard_rate ? String(it.standard_rate) : line.rate, gst_rate: String(it?.gst_rate ?? line.gst_rate) };
+                        setInv(next);
+                      }}>
+                        <SelectTrigger className="h-9"><SelectValue placeholder="Item" /></SelectTrigger>
+                        <SelectContent>{items.map(i => <SelectItem key={i.id} value={i.id}>{i.name}</SelectItem>)}</SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid grid-cols-3 gap-2">
+                      <div>
+                        <Label className="text-[10px] uppercase text-muted-foreground">Qty</Label>
+                        <Input className="h-9 text-right num" type="number" step="0.001" placeholder="Qty" value={line.quantity}
+                          onChange={(e) => { const next = [...inv]; next[idx] = { ...line, quantity: e.target.value }; setInv(next); }} />
+                      </div>
+                      <div>
+                        <Label className="text-[10px] uppercase text-muted-foreground">Rate</Label>
+                        <Input className="h-9 text-right num" type="number" step="0.01" placeholder="Rate" value={line.rate}
+                          onChange={(e) => { const next = [...inv]; next[idx] = { ...line, rate: e.target.value }; setInv(next); }} />
+                      </div>
+                      <div>
+                        <Label className="text-[10px] uppercase text-muted-foreground">GST</Label>
+                        <Select value={line.gst_rate} onValueChange={(v) => { const next = [...inv]; next[idx] = { ...line, gst_rate: v }; setInv(next); }}>
+                          <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                          <SelectContent>{GST_RATES.map(r => <SelectItem key={r} value={String(r)}>{r}%</SelectItem>)}</SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                    <div className="flex justify-end">
+                      <Button type="button" size="sm" variant="ghost" onClick={() => setInv(inv.filter((_, i) => i !== idx))} className="text-destructive hover:text-destructive">
+                        <Trash2 className="w-4 h-4 mr-1" /> Remove
+                      </Button>
+                    </div>
                   </div>
-                  <Input className="col-span-2 h-9 text-right num" type="number" step="0.001" placeholder="Qty" value={line.quantity}
-                    onChange={(e) => { const next = [...inv]; next[idx] = { ...line, quantity: e.target.value }; setInv(next); }} />
-                  <Input className="col-span-2 h-9 text-right num" type="number" step="0.01" placeholder="Rate" value={line.rate}
-                    onChange={(e) => { const next = [...inv]; next[idx] = { ...line, rate: e.target.value }; setInv(next); }} />
-                  <Select value={line.gst_rate} onValueChange={(v) => { const next = [...inv]; next[idx] = { ...line, gst_rate: v }; setInv(next); }}>
-                    <SelectTrigger className="col-span-2 h-9"><SelectValue /></SelectTrigger>
-                    <SelectContent>{GST_RATES.map(r => <SelectItem key={r} value={String(r)}>{r}%</SelectItem>)}</SelectContent>
-                  </Select>
-                  <Button type="button" size="icon" variant="ghost" className="col-span-1 h-9" onClick={() => setInv(inv.filter((_, i) => i !== idx))}>
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
+
+                  {/* Desktop grid layout */}
+                  <div className="hidden md:grid grid-cols-12 gap-2 items-end">
+                    <div className="col-span-5">
+                      <Select value={line.stock_item_id} onValueChange={(v) => {
+                        const it = items.find(x => x.id === v);
+                        const next = [...inv]; next[idx] = { ...line, stock_item_id: v, rate: it?.standard_rate ? String(it.standard_rate) : line.rate, gst_rate: String(it?.gst_rate ?? line.gst_rate) };
+                        setInv(next);
+                      }}>
+                        <SelectTrigger className="h-9"><SelectValue placeholder="Item" /></SelectTrigger>
+                        <SelectContent>{items.map(i => <SelectItem key={i.id} value={i.id}>{i.name}</SelectItem>)}</SelectContent>
+                      </Select>
+                    </div>
+                    <Input className="col-span-2 h-9 text-right num" type="number" step="0.001" placeholder="Qty" value={line.quantity}
+                      onChange={(e) => { const next = [...inv]; next[idx] = { ...line, quantity: e.target.value }; setInv(next); }} />
+                    <Input className="col-span-2 h-9 text-right num" type="number" step="0.01" placeholder="Rate" value={line.rate}
+                      onChange={(e) => { const next = [...inv]; next[idx] = { ...line, rate: e.target.value }; setInv(next); }} />
+                    <Select value={line.gst_rate} onValueChange={(v) => { const next = [...inv]; next[idx] = { ...line, gst_rate: v }; setInv(next); }}>
+                      <SelectTrigger className="col-span-2 h-9"><SelectValue /></SelectTrigger>
+                      <SelectContent>{GST_RATES.map(r => <SelectItem key={r} value={String(r)}>{r}%</SelectItem>)}</SelectContent>
+                    </Select>
+                    <Button type="button" size="icon" variant="ghost" className="col-span-1 h-9" onClick={() => setInv(inv.filter((_, i) => i !== idx))}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               ))}
               {inv.length === 0 && <p className="text-sm text-muted-foreground text-center py-4">Click "Add Item" to start</p>}
@@ -270,23 +312,47 @@ export default function VoucherEntry() {
             <Button type="button" size="sm" variant="outline" onClick={addLine}><Plus className="w-3 h-3 mr-1" />Add</Button>
           </div>
           {lines.map((line, idx) => (
-            <div key={idx} className="grid grid-cols-12 gap-2 items-end">
-              <Select value={line.entry_type} onValueChange={(v: any) => { const n = [...lines]; n[idx] = { ...line, entry_type: v }; setLines(n); }}>
-                <SelectTrigger className="col-span-2 h-9"><SelectValue /></SelectTrigger>
-                <SelectContent><SelectItem value="debit">Dr</SelectItem><SelectItem value="credit">Cr</SelectItem></SelectContent>
-              </Select>
-              <Select value={line.ledger_id} onValueChange={(v) => { const n = [...lines]; n[idx] = { ...line, ledger_id: v }; setLines(n); }}>
-                <SelectTrigger className="col-span-7 h-9"><SelectValue placeholder="Ledger" /></SelectTrigger>
-                <SelectContent className="max-h-72">{ledgers.map(l => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent>
-              </Select>
-              <Input type="number" step="0.01" placeholder="Amount" className="col-span-2 h-9 text-right num" value={line.amount}
-                onChange={(e) => { const n = [...lines]; n[idx] = { ...line, amount: e.target.value }; setLines(n); }} />
-              <Button type="button" size="icon" variant="ghost" className="col-span-1 h-9" onClick={() => setLines(lines.filter((_, i) => i !== idx))}>
-                <Trash2 className="w-4 h-4" />
-              </Button>
+            <div key={idx} className="rounded-md border border-border bg-muted/30 p-2 md:bg-transparent md:border-0 md:p-0 md:rounded-none">
+              {/* Mobile stacked */}
+              <div className="md:hidden space-y-2">
+                <div className="grid grid-cols-[80px_1fr] gap-2">
+                  <Select value={line.entry_type} onValueChange={(v: any) => { const n = [...lines]; n[idx] = { ...line, entry_type: v }; setLines(n); }}>
+                    <SelectTrigger className="h-9"><SelectValue /></SelectTrigger>
+                    <SelectContent><SelectItem value="debit">Dr</SelectItem><SelectItem value="credit">Cr</SelectItem></SelectContent>
+                  </Select>
+                  <Select value={line.ledger_id} onValueChange={(v) => { const n = [...lines]; n[idx] = { ...line, ledger_id: v }; setLines(n); }}>
+                    <SelectTrigger className="h-9"><SelectValue placeholder="Ledger" /></SelectTrigger>
+                    <SelectContent className="max-h-72">{ledgers.map(l => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent>
+                  </Select>
+                </div>
+                <div className="flex gap-2 items-center">
+                  <Input type="number" step="0.01" placeholder="Amount" className="h-9 text-right num flex-1" value={line.amount}
+                    onChange={(e) => { const n = [...lines]; n[idx] = { ...line, amount: e.target.value }; setLines(n); }} />
+                  <Button type="button" size="icon" variant="ghost" className="h-9 w-9 text-destructive hover:text-destructive" onClick={() => setLines(lines.filter((_, i) => i !== idx))}>
+                    <Trash2 className="w-4 h-4" />
+                  </Button>
+                </div>
+              </div>
+
+              {/* Desktop grid */}
+              <div className="hidden md:grid grid-cols-12 gap-2 items-end">
+                <Select value={line.entry_type} onValueChange={(v: any) => { const n = [...lines]; n[idx] = { ...line, entry_type: v }; setLines(n); }}>
+                  <SelectTrigger className="col-span-2 h-9"><SelectValue /></SelectTrigger>
+                  <SelectContent><SelectItem value="debit">Dr</SelectItem><SelectItem value="credit">Cr</SelectItem></SelectContent>
+                </Select>
+                <Select value={line.ledger_id} onValueChange={(v) => { const n = [...lines]; n[idx] = { ...line, ledger_id: v }; setLines(n); }}>
+                  <SelectTrigger className="col-span-7 h-9"><SelectValue placeholder="Ledger" /></SelectTrigger>
+                  <SelectContent className="max-h-72">{ledgers.map(l => <SelectItem key={l.id} value={l.id}>{l.name}</SelectItem>)}</SelectContent>
+                </Select>
+                <Input type="number" step="0.01" placeholder="Amount" className="col-span-2 h-9 text-right num" value={line.amount}
+                  onChange={(e) => { const n = [...lines]; n[idx] = { ...line, amount: e.target.value }; setLines(n); }} />
+                <Button type="button" size="icon" variant="ghost" className="col-span-1 h-9" onClick={() => setLines(lines.filter((_, i) => i !== idx))}>
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
             </div>
           ))}
-          <div className="border-t pt-2 flex gap-6 text-sm justify-end">
+          <div className="border-t pt-2 flex flex-wrap gap-x-4 gap-y-1 text-sm sm:justify-end">
             <div>Dr Total: <span className="num font-semibold">{formatINR(drTotal)}</span></div>
             <div>Cr Total: <span className="num font-semibold">{formatINR(crTotal)}</span></div>
             <div className={Math.abs(drTotal - crTotal) > 0.001 ? "text-destructive font-bold" : "text-success font-bold"}>
@@ -298,9 +364,9 @@ export default function VoucherEntry() {
 
       <Card className="p-4 space-y-3">
         <div><Label>Narration</Label><Textarea value={narration} onChange={e => setNarration(e.target.value)} rows={2} /></div>
-        <div className="flex justify-end gap-2">
-          <Button variant="outline" onClick={() => navigate(-1)}>Cancel (Esc)</Button>
-          <Button onClick={save} disabled={saving}>{saving ? "Saving…" : "Accept (Ctrl+A)"}</Button>
+        <div className="flex flex-col-reverse sm:flex-row sm:justify-end gap-2">
+          <Button variant="outline" onClick={() => navigate(-1)} className="w-full sm:w-auto">Cancel (Esc)</Button>
+          <Button onClick={save} disabled={saving} className="w-full sm:w-auto">{saving ? "Saving…" : "Accept (Ctrl+A)"}</Button>
         </div>
       </Card>
     </div>

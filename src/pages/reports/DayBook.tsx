@@ -25,13 +25,13 @@ export default function DayBook() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold">Day Book</h1>
-      <Card className="p-4 flex gap-4">
-        <div><Label className="text-xs">From</Label><Input type="date" value={from} onChange={e => setFrom(e.target.value)} className="h-8" /></div>
-        <div><Label className="text-xs">To</Label><Input type="date" value={to} onChange={e => setTo(e.target.value)} className="h-8" /></div>
+      <h1 className="text-xl sm:text-2xl font-bold">Day Book</h1>
+      <Card className="p-4 flex flex-col sm:flex-row gap-3 sm:gap-4">
+        <div className="flex-1 sm:flex-none"><Label className="text-xs">From</Label><Input type="date" value={from} onChange={e => setFrom(e.target.value)} className="h-8" /></div>
+        <div className="flex-1 sm:flex-none"><Label className="text-xs">To</Label><Input type="date" value={to} onChange={e => setTo(e.target.value)} className="h-8" /></div>
       </Card>
-      <Card>
-        <Table>
+      <Card className="overflow-x-auto">
+        <Table className="min-w-[640px]">
           <TableHeader>
             <TableRow>
               <TableHead>Date</TableHead><TableHead>Type</TableHead><TableHead>No.</TableHead>

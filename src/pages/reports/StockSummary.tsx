@@ -36,9 +36,9 @@ export default function StockSummary() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold">Stock Summary</h1>
-      <Card>
-        <Table>
+      <h1 className="text-xl sm:text-2xl font-bold">Stock Summary</h1>
+      <Card className="overflow-x-auto">
+        <Table className="min-w-[760px]">
           <TableHeader><TableRow>
             <TableHead>Item</TableHead><TableHead>Unit</TableHead>
             <TableHead className="text-right">Opening</TableHead><TableHead className="text-right">Inwards</TableHead>

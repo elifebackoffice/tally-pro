@@ -23,16 +23,16 @@ export default function Ledgers() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold">Ledgers</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">Ledgers</h1>
           <p className="text-sm text-muted-foreground">{ledgers.length} ledger accounts</p>
         </div>
-        <Button asChild><Link to="/masters/ledgers/new"><Plus className="w-4 h-4 mr-1" />Create (Alt+C)</Link></Button>
+        <Button asChild className="w-full sm:w-auto"><Link to="/masters/ledgers/new"><Plus className="w-4 h-4 mr-1" />Create (Alt+C)</Link></Button>
       </div>
       <Input placeholder="Search…" value={search} onChange={e => setSearch(e.target.value)} className="max-w-sm" />
-      <Card>
-        <Table>
+      <Card className="overflow-x-auto">
+        <Table className="min-w-[640px]">
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead>

@@ -36,7 +36,7 @@ export default function ProfitLoss() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold">Profit & Loss A/c</h1>
+      <h1 className="text-xl sm:text-2xl font-bold">Profit & Loss A/c</h1>
       <div className="grid md:grid-cols-2 gap-4">
         <Card className="p-4">
           <h2 className="font-bold mb-3 pb-2 border-b">Expenses (Dr)</h2>

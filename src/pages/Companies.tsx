@@ -12,12 +12,12 @@ export default function Companies() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-4">
-      <div className="flex items-center justify-between">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <div>
-          <h1 className="text-2xl font-bold">Companies</h1>
+          <h1 className="text-xl sm:text-2xl font-bold">Companies</h1>
           <p className="text-sm text-muted-foreground">Select a company to load, or create a new one.</p>
         </div>
-        <Button onClick={() => navigate("/companies/new")}>
+        <Button onClick={() => navigate("/companies/new")} className="w-full sm:w-auto">
           <Plus className="w-4 h-4 mr-1" /> New Company
         </Button>
       </div>

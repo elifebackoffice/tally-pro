@@ -19,12 +19,12 @@ export default function StockItems() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-4">
-      <div className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Stock Items</h1>
-        <Button asChild><Link to="/masters/stock-items/new"><Plus className="w-4 h-4 mr-1" />Create</Link></Button>
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <h1 className="text-xl sm:text-2xl font-bold">Stock Items</h1>
+        <Button asChild className="w-full sm:w-auto"><Link to="/masters/stock-items/new"><Plus className="w-4 h-4 mr-1" />Create</Link></Button>
       </div>
-      <Card>
-        <Table>
+      <Card className="overflow-x-auto">
+        <Table className="min-w-[720px]">
           <TableHeader>
             <TableRow>
               <TableHead>Name</TableHead><TableHead>HSN</TableHead><TableHead>Unit</TableHead>

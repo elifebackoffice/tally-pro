@@ -31,9 +31,9 @@ export default function Gstr1() {
 
   return (
     <div className="max-w-6xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold">GSTR-1 Summary <span className="text-sm font-normal text-muted-foreground">(Outward Supplies)</span></h1>
-      <Card>
-        <Table>
+      <h1 className="text-xl sm:text-2xl font-bold">GSTR-1 Summary <span className="text-sm font-normal text-muted-foreground">(Outward Supplies)</span></h1>
+      <Card className="overflow-x-auto">
+        <Table className="min-w-[960px]">
           <TableHeader><TableRow>
             <TableHead>Date</TableHead><TableHead>Inv No.</TableHead><TableHead>Party</TableHead>
             <TableHead>GSTIN</TableHead><TableHead>POS</TableHead>
