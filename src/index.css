@@ -122,4 +122,6 @@
   .tally-row-hover {
     @apply hover:bg-accent/10 transition-colors;
   }
+  .no-scrollbar::-webkit-scrollbar { display: none; }
+  .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 }

@@ -53,8 +53,8 @@ export default function Gateway() {
   return (
     <div className="max-w-7xl mx-auto space-y-6">
       <div>
-        <h1 className="text-2xl font-bold">{current.name}</h1>
-        <p className="text-sm text-muted-foreground">Gateway of Tally · {current.state} · GSTIN {current.gstin || "—"}</p>
+        <h1 className="text-xl sm:text-2xl font-bold break-words">{current.name}</h1>
+        <p className="text-xs sm:text-sm text-muted-foreground break-words">Gateway of Tally · {current.state} · GSTIN {current.gstin || "—"}</p>
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
@@ -89,11 +89,11 @@ export default function Gateway() {
 
 function StatCard({ icon: Icon, label, value }: { icon: any; label: string; value: string }) {
   return (
-    <Card className="p-4 flex items-center gap-3">
-      <div className="w-10 h-10 rounded bg-primary/10 text-primary flex items-center justify-center"><Icon className="w-5 h-5" /></div>
-      <div>
-        <div className="text-xs text-muted-foreground">{label}</div>
-        <div className="text-lg font-bold num">{value}</div>
+    <Card className="p-3 sm:p-4 flex items-center gap-3 min-w-0">
+      <div className="w-9 h-9 sm:w-10 sm:h-10 rounded bg-primary/10 text-primary flex items-center justify-center shrink-0"><Icon className="w-5 h-5" /></div>
+      <div className="min-w-0">
+        <div className="text-xs text-muted-foreground truncate">{label}</div>
+        <div className="text-sm sm:text-lg font-bold num truncate">{value}</div>
       </div>
     </Card>
   );

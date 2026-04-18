@@ -37,9 +37,9 @@ export default function TrialBalance() {
 
   return (
     <div className="max-w-5xl mx-auto space-y-4">
-      <h1 className="text-2xl font-bold">Trial Balance</h1>
-      <Card>
-        <Table>
+      <h1 className="text-xl sm:text-2xl font-bold">Trial Balance</h1>
+      <Card className="overflow-x-auto">
+        <Table className="min-w-[560px]">
           <TableHeader><TableRow><TableHead>Ledger</TableHead><TableHead>Group</TableHead><TableHead className="text-right">Debit</TableHead><TableHead className="text-right">Credit</TableHead></TableRow></TableHeader>
           <TableBody>
             {rows.map((r, i) => (
